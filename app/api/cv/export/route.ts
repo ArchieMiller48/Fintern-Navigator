@@ -145,7 +145,7 @@ export async function POST(req: NextRequest) {
       const docXml = await docXmlFile.async("string");
       zip.file("word/document.xml", applyReplacementsToXml(docXml, replacements));
       const outBuffer = await zip.generateAsync({ type: "nodebuffer", compression: "DEFLATE" });
-      return new NextResponse(outBuffer, {
+      return new NextResponse(new Uint8Array(outBuffer), {
         headers: {
           "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
           "Content-Disposition": `attachment; filename="${baseName} (Updated).docx"`,
@@ -159,7 +159,7 @@ export async function POST(req: NextRequest) {
       }
       const zip = buildDocxFromText(rawText, replacements);
       const outBuffer = await zip.generateAsync({ type: "nodebuffer", compression: "DEFLATE" });
-      return new NextResponse(outBuffer, {
+      return new NextResponse(new Uint8Array(outBuffer), {
         headers: {
           "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
           "Content-Disposition": `attachment; filename="${baseName} (Updated).docx"`,
